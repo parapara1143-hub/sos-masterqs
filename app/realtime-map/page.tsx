@@ -35,6 +35,7 @@ export default function RealtimeMapPage() {
     })();
   }, []);
 
+  // ✅ Corrigido: useEffect retorna função limpa
   useEffect(() => {
     const s = getSocket();
     const handler = (payload: any) => {
@@ -47,7 +48,9 @@ export default function RealtimeMapPage() {
       });
     };
     s.on("location.update", handler);
-    return () => s.off("location.update", handler);
+    return () => {
+      s.off("location.update", handler);
+    };
   }, []);
 
   if (!bounds) return <p>Carregando mapa...</p>;
