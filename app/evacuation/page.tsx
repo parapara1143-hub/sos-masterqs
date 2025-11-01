@@ -10,8 +10,8 @@ export default function Page(){
   const [area,setArea]=useState("Fábrica A");
   const [loading,setLoading]=useState(true);
 
-  async function load(){
-    try{ setLoading=true; 
+async function load(){
+  try{ setLoading(true); 
       const r=await api.get("/api/evacuation/plans?limit=50"); setRows(r.data.items||[]);
     }catch{ setRows([{id:1,name:"Simulado 2025/10",area:"Betim",status:"draft"}]); }
     finally{ setLoading(false); }
