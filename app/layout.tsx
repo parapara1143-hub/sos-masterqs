@@ -8,8 +8,6 @@ import { useUI } from "@/src/store/useUI";
 import { hasSession } from "@/src/lib/auth";
 import { SafeINThemeProvider } from "@/src/theme/theme";
 
-export const metadata = { title: "SOS Enterprise – Painel Master QS Inclusão" };
-
 export default function RootLayout({ children }: { children: React.ReactNode }){
   const [open,setOpen]=useState(true);
   const { dark, toggleDark } = useUI();
