@@ -75,7 +75,6 @@ export default function RealtimeMapPage() {
 
       <MapContainer
         bounds={bounds}
-        center={[-19.967, -44.201]}
         zoom={17}
         style={{ height: "70vh", width: "100%", borderRadius: 12 }}
       >
