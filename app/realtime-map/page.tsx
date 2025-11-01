@@ -5,14 +5,12 @@ import { useEffect, useState } from "react";
 import { getSocket } from "@/src/lib/socket";
 import { TILE_URL, PLANT_OVERLAY } from "@/src/lib/constants";
 
-// ✅ Importa componentes do React-Leaflet apenas no cliente (sem SSR)
 const MapContainer = dynamic(() => import("react-leaflet").then(m => m.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import("react-leaflet").then(m => m.TileLayer), { ssr: false });
 const CircleMarker = dynamic(() => import("react-leaflet").then(m => m.CircleMarker), { ssr: false });
 const Tooltip = dynamic(() => import("react-leaflet").then(m => m.Tooltip), { ssr: false });
 const ImageOverlay = dynamic(() => import("react-leaflet").then(m => m.ImageOverlay), { ssr: false });
 
-// Tipagem para os pontos de localização
 type Loc = {
   user_id: number;
   x?: number;
@@ -29,16 +27,14 @@ export default function RealtimeMapPage() {
   const [usePlant, setUsePlant] = useState(true);
   const [bounds, setBounds] = useState<any>(null);
 
-  // ✅ Cria os limites do mapa apenas no cliente (evita erro de "window is not defined")
   useEffect(() => {
     (async () => {
-      // @ts-ignore → ignora tipagem ausente de Leaflet
+      // @ts-ignore
       const L = await import("leaflet");
       setBounds(L.latLngBounds([[-19.968, -44.202], [-19.966, -44.200]]));
     })();
   }, []);
 
-  // ✅ Atualiza o mapa em tempo real via WebSocket
   useEffect(() => {
     const s = getSocket();
     const handler = (payload: any) => {
@@ -51,19 +47,14 @@ export default function RealtimeMapPage() {
       });
     };
     s.on("location.update", handler);
-    return () => {
-      s.off("location.update", handler);
-    };
+    return () => s.off("location.update", handler);
   }, []);
 
-  // Enquanto o mapa ainda não tem os bounds
   if (!bounds) return <p>Carregando mapa...</p>;
 
-  // ✅ Renderização principal do mapa
   return (
     <div style={{ display: "grid", gap: 16 }}>
       <h1>Planta em tempo real</h1>
-
       <label>
         <input
           type="checkbox"
@@ -75,7 +66,6 @@ export default function RealtimeMapPage() {
 
       <MapContainer
         bounds={bounds}
-        zoom={17}
         style={{ height: "70vh", width: "100%", borderRadius: 12 }}
       >
         {!usePlant ? (
